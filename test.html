@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="csstest.css">
+	<title>Js Calculator</title>
+</head>
+<body>
+	<div class="wrapper">
+		<h1> JS Simple Calculator</h1>
+		<p>0</p>
+		<input class="val1" type="text" placeholder="Value 1">
+		<input class="val2" type="text" placeholder="Value 2">
+		<select class="operator">
+			<option value="add">+</option>
+			<option value="sub">-</option>
+			<option value="mul">*</option>
+			<option value="div">/</option>
+		</select>
+		<button class="submit">=</button>
+	</div>
+
+	<script type="text/javascript">
+		var btn = document.querySelector('.submit');
+		var value1 = document.querySelector('.val1');
+		var value2 = document.querySelector('.val2');
+		var calcul = document.querySelector('.operator');
+		var view = document.querySelector('p');
+
+		var add = function(a, b){
+			return a + b;
+		}
+
+		var sub = function(a, b){
+			return a - b;
+		}
+
+		var mul = function(a, b){
+			return a * b;
+		}
+
+		var div = function(a, b){
+			return a / b;
+		}
+
+		var submit = function(){
+			var valeur1 = parseFloat(value1.value);
+			var valeur2 = parseFloat(value2.value);
+			var operand = calcul.value;
+			var result;
+
+			switch(operand){
+				case "add":
+					result = add(valeur1, valeur2);
+					break;
+				case "sub":
+					result = sub(valeur1, valeur2);
+					break;
+				case "mul":
+					result = mul(valeur1, valeur2);
+					break;
+				case "div":
+					result = div(valeur1, valeur2);
+					break;
+				default:
+					alert("Renseignez un opérateur !");
+			}
+
+				if (isNaN(valeur1) || isNaN(valeur2)){
+				view.innerHTML = "Error, values or one of value isn't a number !";
+				}else{
+					view.innerHTML = result;
+				}
+
+			
+
+			
+
+		}
+
+		btn.addEventListener('click', submit);
+
+
+	</script>
+</body>
+</html>
