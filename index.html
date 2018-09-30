@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+ 
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./calculatrice.css">
+
+    <title>Calculatrice simple en JS</title>
+    <meta name="description" content="Small test for the first week of training">
+    <!-- Name of the Author of the Page/Blog/Article, not useful for Shops or Web Apps -->
+    <meta name="author" content="Johan Frykten Gache">
+    <!-- The Favicon is the small symbol in the browser tab -->
+    <link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon">
+
+    <!-- Set the base URL for all relative URLs within the document -->
+    <base href="./" target="_blank">
+
+    <!-- Control the behavior of search engine crawling and indexing -->
+    <meta name="robots" content="index, follow">       <!-- All Search Engines -->
+    <meta name="googlebot" content="index, follow">    <!-- Google Specific -->
+    
+    <!-- Scripts JS à placer en dernier -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous">
+    </script>
+  </head>
+
+  <body>
+   
+    <main id="wrapper">
+     
+      <section id="calculator">
+       
+        <section class="row">
+          <div id="reset" class="button">C</div>
+          <div id="viewer"></div>
+        </section>
+        
+        <section class="row">
+          <div class="button num" data-num="9">9</div>
+          <div class="button num" data-num="8">8</div>
+          <div class="button num" data-num="7">7</div>
+          <div class="button op" data-op="+">+</div>
+        </section>
+        
+        <section class="row">
+          <div class="button num" data-num="6">6</div>
+          <div class="button num" data-num="5">5</div>
+          <div class="button num" data-num="4">4</div>
+          <div class="button op" data-op="-">-</div>
+        </section>
+        
+        <section class="row">
+          <div class="button num" data-num="3">3</div>
+          <div class="button num" data-num="2">2</div>
+          <div class="button num" data-num="1">1</div>
+          <div class="button op" data-op="*">*</div>
+        </section>
+        
+        <section class="row">
+          <div class="button num" data-num="0">0</div>
+          <div class="button num" data-num=".">.</div>
+          <div id="equals" class="button" data-equals="equals">=</div>
+          <div class="button op" data-op="/">/</div>
+        </section>
+        
+      </section>
+      
+    </main>
+ 
+    <script src="calculatrice.js"></script>
+  </body>
+</html>

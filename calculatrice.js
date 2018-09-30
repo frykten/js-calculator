@@ -1,226 +1,268 @@
 // Variables front
-var viewer = $(".viewer");
-var reset = $(".c");
-var equals = $(".equals");
-var ops = $(".op");
-var nums = $(".num");
+var viewerPanel = document.querySelector('#viewer');
+var resetButton = document.querySelector('#reset');
+var equalsButton = document.querySelector('#equals');
+var operatorButtons = document.querySelectorAll('.op');
+var numberButtons = document.querySelectorAll('.num');
 // Variables Back
-var curNum, oldNum, operator;
+var currentNumberStocked, firstNumberStocked, operatorStocked;
 // Variables Result
-var result = "0";
+var resultToPrint = '0';
+const emptyVariableToResets = '';
+
 
 // Functions for operations
-var add = function (a, b) {
+const add = function (a, b) {
     return a + b;
 };
 
-var sub = function (a, b) {
+const sub = function (a, b) {
     return a - b;
 };
 
-var mul = function (a, b) {
+const mul = function (a, b) {
     return a * b;
 };
 
-var div = function (a, b) {
+const div = function (a, b) {
     return a / b;
 };
 
+
 // Functions to use/add/remove stuff
-var addNF = function(curVal) {
-    // If First number, reset
-    if (result != "") {
-        curNum = curVal;
-        result = "";
-        viewer.removeClass("error");
-    }
-    else
-        curNum += curVal;
-    
-    viewer.text(curNum);
+var changeViewerText = function(newTextToPrint) {
+    viewerPanel.innerHTML = newTextToPrint;
 }
 
-var addNum = function() {
+var changeViewerClass = function(isError) {
+  if (isError === 'isError')
+    viewerPanel.classList.add('error');
+  else 
+    viewerPanel.classList.remove('error');
+}
+
+var addNumberViaClick = function() {
     // Add number
-    let curVal = $(this).attr("data-num");
-    addNF(curVal);
+    let currentEnteringValue = this.dataset.num;
+    addNumberToCounts(currentEnteringValue);
 };
 
-var addNumKey = function(a) {
-    let curVal = a;
-    addNF(curVal);
+var addNumberViaKey = function(a) {
+    let currentEnteringValue = a;
+    addNumberToCounts(currentEnteringValue);
 };
 
-var remKey = function() {
+var removeNumberViaKey = function() {
     // On backspace only, remove last char
-    curNum = curNum.slice(0, curNum.length-1);
-    viewer.text(curNum);
+    currentNumberStocked = currentNumberStocked.slice(0, currentNumberStocked.length-1);
+    changeViewerText(currentNumberStocked);
 }
 
-var addOF = function(curOp) {
-    oldNum = curNum;
-    curNum = "";
-    operator = curOp;
-    equals.attr("data-result", "");
-    viewer.append(curOp);
+var addNumberToCounts = function(currentEnteringValue) {
+    // If First number, reset
+    if (resultToPrint != '') {
+        resetCalculusIfNotAlready(currentEnteringValue)
+    }
+    // Else add numbers
+    else
+        currentNumberStocked += currentEnteringValue;
+    
+    changeViewerText(currentNumberStocked);
 }
 
-var addOp = function() {
+var resetCalculusIfNotAlready = function(currentEnteringValue) {
+    if (firstNumberStocked === 0)
+        firstNumberStocked = resultToPrint;
+  
+    currentNumberStocked = currentEnteringValue;
+    resultToPrint = emptyVariableToResets;
+    changeViewerClass('isNotError')
+}
+
+var addOperatorViaClickToMath = function(currentOperator) {
+    if (currentNumberStocked && firstNumberStocked) {
+        submit();
+        return operatorStocked = currentOperator;
+    }
+
+    if (operatorStocked) {
+        let txtWithNewOperator = viewerPanel.innerHTML.slice(0, viewerPanel.innerHTML.length-1)
+        changeViewerText(txtWithNewOperator + currentOperator)
+
+        return operatorStocked = currentOperator;
+    }
+  
+    firstNumberStocked = currentNumberStocked;
+    currentNumberStocked = emptyVariableToResets;
+    operatorStocked = currentOperator;
+    equalsButton.dataset.result = '';
+    viewerPanel.append(currentOperator);
+}
+
+var addOperatorViaClick = function() {
     // Add Operand
-    let curOp = $(this).attr("data-op");
-    addOF(curOp);
+    let currentOperator = this.dataset.op;
+    addOperatorViaClickToMath(currentOperator);
 };
 
-var addOpKey = function(a) {
-    let curOp = a;
-    addOF(curOp);
+var addOperatorViaKeyboard = function(a) {
+    let currentOperator = a;
+    addOperatorViaClickToMath(currentOperator);
 };
 
 var submit = function() {
     // Get Float Numbers
-    let a = parseFloat(oldNum);
-    let b = parseFloat(curNum);
+    let a = parseFloat(firstNumberStocked);
+    let b = parseFloat(currentNumberStocked);
     
     // Calculus
-    switch(operator) {
+    switch(operatorStocked) {
         case "+":
-            result = add(a, b);
+            resultToPrint = add(a, b);
             break;
         case "-":
-            result = sub(a, b);
+            resultToPrint = sub(a, b);
             break;
         case "*":
-            result = mul(a, b);
+            resultToPrint = mul(a, b);
             break;
         case "/":
-            result = div(a, b);
+            resultToPrint = div(a, b);
             break;
         default:
-            result = curNum;
+            resultToPrint = currentNumberStocked;
     }
     
     // Check if Number
-    if (!isFinite(result)) {
-        if (isNaN(result)) {
-            result = "Ya fuckin' killed it";
+    if (!isFinite(resultToPrint)) {
+        if (isNaN(resultToPrint)) {
+            resultToPrint = "Ya killed it";
         }
         else {
-            result = "Ya beaver sucker";
+            resultToPrint = "Ya beaver friend";
         }
         // Toggle Error if not already there
-        viewer.addClass("error");
+        changeViewerClass('isError')
     }
     
     // Result
-    viewer.text(result);
-    oldNum = 0;
-    curNum = result;
+    changeViewerText(resultToPrint);
+    firstNumberStocked = 0;
+    operatorStocked = emptyVariableToResets;
+    currentNumberStocked = resultToPrint;
 };
 
-var subRes = function() {
+var reset = function() {
     // Reset
-    viewer.removeClass("error");
-    viewer.text("0");
-    oldNum = "";
-    curNum = "";
+    changeViewerClass('isNotError');
+    changeViewerText('0');
+    firstNumberStocked = emptyVariableToResets;
+    currentNumberStocked = emptyVariableToResets;
+    operatorStocked = emptyVariableToResets;
 };
 
 
-// On Clicks
-nums.click(addNum);
+// Setting On Click Behaviours
+for (let i = 0; i < numberButtons.length; i++) {
+    numberButtons[i].onclick = addNumberViaClick;
+}
 
-ops.click(addOp);
+for (let i = 0; i < operatorButtons.length; i++) {
+    operatorButtons[i].onclick = addOperatorViaClick;
+}
 
-equals.click(submit);
+equalsButton.onclick = submit;
 
-reset.click(subRes);
+resetButton.onclick = reset;
 
 
 // Press keyboard
-$(document).unbind("keydown").keydown(function(e) {
-    // Debug
-    console.log(e.which);
-    
-    // Switch to all the keys...
-    switch(e.which) {
-        // Press Enter
-        case 13:
-            submit();
-            break;
-
-        // Press Operands
-        case 220 || 88 || 106:
-            addOpKey("*");
-            break;
-        case 187:
-            if (e.shiftKey == false) {
-                submit();
-                break;
-            } else {
-                addOpKey("+");
-                break;
-            }
-        case 108:
-            addOpKey("-");
-            break;
-        case 54:
-            if (e.shiftKey == false) {
-                addOpKey("-");
-                break;
-            } else {
-                addNumKey(6);
-                break;
-            }
-        case 191 || 109:
-            addOpKey("/");
-            break;
-            
-        // Press numbers
-        case 48 || 96:
-            addNumKey(0);
-            break;
-        case 49 || 97:
-            addNumKey(1);
-            break;
-        case 50 || 98:
-            addNumKey(2);
-            break;
-        case 51 || 99:
-            addNumKey(3);
-            break;
-        case 52 || 100:
-            addNumKey(4);
-            break;
-        case 53 || 101:
-            addNumKey(5);
-            break;
-        case 54 || 102:
-            addNumKey(6);
-            break;
-        case 55 || 103:
-            addNumKey(7);
-            break;
-        case 56 || 104:
-            addNumKey(8);
-            break;
-        case 57 || 105:
-            addNumKey(9);
-            break;
-        case 190:
-            addNumKey(".");
-            break;
-        case 188:
-            addNumKey(".");
-            break;
-            
-        // Press Backspace 
-        case 8:
-            remKey();
-            break;
-        
-        // If nope
-        default:
-            console.log("");
-            break;
-    }
-});
+//{
+//  $(document).unbind('keydown').keydown(function(e) {
+//    // Debug
+//    console.log(e.which);
+//    
+//    // Switch to all the keys...
+//    switch(e.which) {
+//        // Press Enter
+//        case 13:
+//            submit();
+//            break;
+//
+//        // Press Operands
+//        case 220 || 88 || 106:
+//            addOperatorViaKeyboard('*');
+//            break;
+//        case 187:
+//            if (e.shiftKey == false) {
+//                submit();
+//                break;
+//            } else {
+//                addOperatorViaKeyboard('+');
+//                break;
+//            }
+//        case 108:
+//            addOperatorViaKeyboard('-');
+//            break;
+//        case 54:
+//            if (e.shiftKey == false) {
+//                addOperatorViaKeyboard('-');
+//                break;
+//            } else {
+//                addNumberViaKey(6);
+//                break;
+//            }
+//        case 191 || 109:
+//            addOperatorViaKeyboard('/');
+//            break;
+//            
+//        // Press numbers
+//        case 48 || 96:
+//            addNumberViaKey(0);
+//            break;
+//        case 49 || 97:
+//            addNumberViaKey(1);
+//            break;
+//        case 50 || 98:
+//            addNumberViaKey(2);
+//            break;
+//        case 51 || 99:
+//            addNumberViaKey(3);
+//            break;
+//        case 52 || 100:
+//            addNumberViaKey(4);
+//            break;
+//        case 53 || 101:
+//            addNumberViaKey(5);
+//            break;
+//        case 54 || 102:
+//            addNumberViaKey(6);
+//            break;
+//        case 55 || 103:
+//            addNumberViaKey(7);
+//            break;
+//        case 56 || 104:
+//            addNumberViaKey(8);
+//            break;
+//        case 57 || 105:
+//            addNumberViaKey(9);
+//            break;
+//        case 190:
+//            addNumberViaKey('.');
+//            break;
+//        case 188:
+//            addNumberViaKey('.');
+//            break;
+//            
+//        // Press Backspace 
+//        case 8:
+//            removeNumberViaKey();
+//            break;
+//        
+//        // If nope
+//        default:
+//            console.log('Not Happening!');
+//            break;
+//    }
+//});
+//}

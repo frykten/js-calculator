@@ -1,84 +1,94 @@
+/* 
+  L'étoile peut être utilisé sur une petite application comme ici
+  pour régler certaines propriétés telles le box sizing
+*/
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html {
-  background: white;
-	background: radial-gradient(circle, #fff 20%, #ccc);
-	background-size: cover;
-    color: #6cacc5;
-}
-
 body {
+  /* Le background white simple est le recours pour les navigateurs ne comprennant pas de gradient */
+  background: white;
+  background: radial-gradient(circle, #f2f2f2 20%, #333d47);
+  background-size: cover;
   color: #6cacc5;
-  font: 300 18px/1.6 "Source Sans Pro",sans-serif;
-  margin: 0;
-  padding: 5em 0 2em;
+  /* Ici, comprendre : font-weight font-size/line-height font-family, font-family (de secours)  */
+  font: 300 18px/1.6 "Source Sans Pro", sans-serif;
+  height: 100vh;
+  /* Le text-align me permet un alignement du texte qui se transmettra à tous les enfants */
   text-align: center;
+  width: 100vw;
 }
 
-.calculator {
+#wrapper {
+  align-items: center;
+  display: flex;
+  height: inherit;
+  justify-content: center;
+  width: inherit;
+}
+
+#calculator {
+    background: #9dd2ea;
+	background: linear-gradient(#9dd2ea, #8bceec);
+    border-radius: .2em;
+    box-shadow: 2px 4px #009de4, 5px 10px 15px rgba(0, 0, 0, 0.3);
     font-size: 28px;
     margin: 0 auto;
     padding: 1em;
     width: 15em;
-    background: #9dd2ea;
-    background-color: #6cacc5;
-    background: #9dd2ea;
-	background: linear-gradient(#9dd2ea, #8bceec);
-    border-radius: .2em;
-    box-shadow: 0px 4px #009de4, 5px 10px 15px rgba(0, 0, 0, 0.3);
 }    
 
 .row {
     display: flex;
 }
 
-.row div {
-    margin: .4rem .3rem;
-    padding: 1rem;
-    width: 4em;
-    cursor: default;
-    color: black;
-    text-shadow: 1px 2px rgba(0, 0, 0, 0.2); 
-    background-color: white;
+.button, #viewer {
+    background: white;
     border-radius: 5px;
     box-shadow: 0px 4px rgba(0, 0, 0, 0.2);
+    color: black;
+    cursor: default;
+    margin: .4rem .3rem;
+    padding: 1rem;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2), 1px 1px 1px rgba(0, 0, 0, 0.2); 
+    width: 4em;
 }
 
-.row div:active {
-    background-color: rgba(0, 0, 0, 0.2);
+.button:active {
+    background: rgba(0, 0, 0, 0.2);
     box-shadow: inset 0px 4px rgba(0, 0, 0, 0.2);
     transform: translateY(3px);
 }
 
-.row .c {
+#reset {
+    background: #ff9a75;
+    box-shadow: 0px 4px #e86130;
     width: 3em;
-    background-color: #ff9a75;
-    box-shadow: 0px 4px #ff5719;
 }
 
-.row .c:active {
-    background-color: #ff5719;
-    box-shadow: inset 0px 4px #c93a06;
-    transform: translateY(3px);s
+#reset:active {
+    background: #e86130;
+    box-shadow: inset 0px 4px #933e1f;
+    transform: translateY(3px);
 }
 
-.row .viewer {
-    overflow: hidden;
-    flex-grow: 1;
-    color: ghostwhite;
-    background-color: #6cacc5;
+#viewer {
+    background: #6cacc5;
     box-shadow: inset 2px 4px rgba(0, 0, 0, 0.2);
+    color: ghostwhite;
+    flex-grow: 1;
+    font-weight: bolder;
+    overflow: hidden;
 }
 
-.row .viewer.error {
-    font-weight: bold;
-    font-kerning: none;
-    letter-spacing: -1px;
+#viewer.error {
+    background: hsl(0, 70%, 51%);
     box-shadow: inset 4px 6px rgba(0, 0, 0, 0.2);
+    letter-spacing: -1px;
+    font-kerning: none;
+    font-weight: bold;
     text-shadow: 1px 2px rgba(0, 0, 0, 0.5);
-    background-color: #e61d1d;
 }
